@@ -28,7 +28,7 @@ Example commands:
 
 ```
 python3 preprocessing.py --chrnum 21 --nr 100000 --rl 150 --nrg 2 --nrb 8
-python3 alignment.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
+mpirun -np 2 python3 alignment.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
 python3 postprocessing.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
 ```
 
