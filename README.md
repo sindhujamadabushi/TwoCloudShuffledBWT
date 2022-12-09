@@ -4,13 +4,15 @@ Note: The preprocessing run will generate several auxiliary files for reference 
 
 options for preprocessing, alignment, and postprocessing:
 
-> --chrnum: chromosome number </br>
-> --nr: total number of reads </br>
-> --rl: read length </br>
-> --nrg: number of read groups </br>
-> --nrb: number of read batches </br>
-> --tcn: template chunk number </br>
-> --rbn: read batch number </br>
+```
+--chrnum: chromosome number </br>
+--nr: total number of reads </br>
+--rl: read length </br>
+--nrg: number of read groups </br>
+--nrb: number of read batches </br>
+--tcn: template chunk number </br>
+--rbn: read batch number </br>
+```
 
 Required python modules:
 
