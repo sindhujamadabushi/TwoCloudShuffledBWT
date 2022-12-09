@@ -4,32 +4,35 @@ Note: The preprocessing run will generate several auxiliary files for reference 
 
 options for preprocessing, alignment, and postprocessing:
 
---chrnum: chromosome number </br>
---nr: total number of reads </br>
---rl: read length </br>
---nrg: number of read groups </br>
---nrb: number of read batches </br>
---tcn: template chunk number </br>
---rbn: read batch number </br>
+> --chrnum: chromosome number </br>
+> --nr: total number of reads </br>
+> --rl: read length </br>
+> --nrg: number of read groups </br>
+> --nrb: number of read batches </br>
+> --tcn: template chunk number </br>
+> --rbn: read batch number </br>
 
 Required python modules:
 
-pip install numpy </br>
-pip install mpi4py </br>
+> pip install numpy </br>
+> pip install mpi4py </br>
 
-cd codes </br>
+> cd codes </br>
 
 Preprocessing:
 
-Example: python3 preprocessing.py --chrnum 21 --nr 100000 --rl 150 --nrg 2 --nrb 8
+Example: 
+> python3 preprocessing.py --chrnum 21 --nr 100000 --rl 150 --nrg 2 --nrb 8
 
 Alignment:
 
-Example: python3 alignment.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
+Example: 
+> python3 alignment.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
 
 Postprocessing: 
 
-Example: python3 postprocessing.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
+Example: 
+> python3 postprocessing.py --chrnum 21 --rl 150 --nrg 2 --nrb 8 --tcn 0 --rbn 0
 
 
 This code is a prototype and is not intended for large-scale commercial applications.
