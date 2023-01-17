@@ -6,7 +6,7 @@ import argparse
 import Parameters
 import editdistance
 
-# Specify the path of the main directory
+
 basePath = os.getcwd() + "/../"
 
 # Specify input sizes for used for preprocessing and alignment
