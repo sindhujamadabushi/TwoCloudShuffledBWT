@@ -52,13 +52,13 @@ startLoadTime = time.process_time()
 print("\nLoading read and template information...")
 
 # Read information
-localPath = inputPath + "chr" + str(chrNum) + "_read_batch_" + str(readBatchNum) + "/"
+localPath = inputPath + "_read_batch_" + str(readBatchNum) + "/"
 readOrder = np.load(localPath + "readOrder.npy")
 superReads = np.load(localPath + "superReads.npy")
 readGroups = np.load(localPath + "readGroups.npy")
 
 # Template information
-localPath = inputPath + "chr" + str(chrNum) + "_template_chunk_" + str(templateChunkNum) + "/"
+localPath = inputPath + "_template_chunk_" + str(templateChunkNum) + "/"
 Lp = np.load(localPath + "Lp.npy")
 Fp = np.load(localPath + "Fp.npy")
 L = np.load(localPath + "L.npy")
