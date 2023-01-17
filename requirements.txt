@@ -8,6 +8,8 @@ certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
+editdistance==0.6.2
+    # via -r requirements.in
 idna==3.4
     # via requests
 mpi4py==3.1.4
