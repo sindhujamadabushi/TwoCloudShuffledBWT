@@ -5,8 +5,7 @@ import time
 import argparse
 import os
 
-# Specify path of the main directory
-basePath = "" + "TwoCloudShuffledBWT/inputs/"
+basePath = os.getcwd() + "/../inputs/"
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--chrnum', type=int, required=True)

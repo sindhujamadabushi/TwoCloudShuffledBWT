@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import numpy as np
 import argparse
@@ -6,10 +7,10 @@ import Parameters
 import editdistance
 
 # Specify the path of the main directory
-basePath = "" + "/TwoCloudShuffledBWT/"
+basePath = os.getcwd() + "/../"
 
 # Specify input sizes for used for preprocessing and alignment
-numReadsPerBatch = 1000
+numReadsPerBatch = 100
 templateLengthPerChunk = 1000000
 
 parser = argparse.ArgumentParser()
