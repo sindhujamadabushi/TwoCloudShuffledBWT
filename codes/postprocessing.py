@@ -6,17 +6,16 @@ import argparse
 import Parameters
 import editdistance
 
-
 basePath = os.getcwd() + "/../"
 
 # Specify input sizes for used for preprocessing and alignment
-numReadsPerBatch = 100
 templateLengthPerChunk = 1000000
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--chrnum', type=int, required=True)
 parser.add_argument('--tcn', type=int, required=True)
 parser.add_argument('--rl', type=int, required=True)
+parser.add_argument('--nr', type=int, required=True)
 parser.add_argument('--nrg', type=int, required=True)
 parser.add_argument('--nrb', type=int)
 parser.add_argument('--rbn', type=int)
@@ -33,6 +32,9 @@ readLength = int(args.rl)
 numReadGroups = int(args.nrg)
 numReadBatches = int(args.nrb)
 readBatchNum = int(args.rbn)
+numReads = int(args.nr)
+
+numReadsPerBatch = numReads//numReadBatches
 
 startTime = time.time()
 
@@ -55,11 +57,11 @@ localPath = resultsPath + "template_chunk_" + str(templateChunkNum) + "/"
 SA = np.load(localPath + 'SA.npy')
 templateChunk = np.load(localPath + 'templateChunk.npy')
 
+primes = np.load(localPath + 'primes.npy')
+
 localPath = resultsPath + "read_batch_" + str(readBatchNum) + "/"
 with open(localPath + 'readMapAcrossGroups.json') as f:
     readMapAcrossGroups = json.load(f)
-
-primes = np.load(outputPath + 'primes.npy')
 
 localPath = basePath + "inputs/reads.txt"
 with open(localPath, "r") as f:
@@ -69,11 +71,9 @@ currReads = reads[readBatchNum * numReadsPerBatch: (readBatchNum + 1) * numReads
 
 print("Finished loading information in ", round(time.time() - st, 2))
 
-# Create primes array for group encoding
-numPrimes = Parameters.numPrimes
-
 # Create easy way to identify groups
 groupDict = dict()
+numPrimes = Parameters.numPrimes
 LStart = Parameters.LStart
 numLs = Parameters.numLs
 l_vals = np.arange(LStart, LStart + numLs)
@@ -91,6 +91,7 @@ for i in range(numReadGroups):
     for j in range(numPrimes * len(l_vals)):
         for k in range(len(a_vals)):
             groupDict[m_vals[i, j, k]] = i
+
 
 ##############################################
 # Modules required for post-processing
@@ -120,7 +121,6 @@ def originalAlignments():
         tmpAlign = int(origAlignInChunk[i])
         if valid_range_low <= tmpAlign < valid_range_up:
             origAlignInChunk[i - readBatchNum * numReadsPerBatch] = [tmpAlign - valid_range_low]
-    print(origAlignInChunk)
     return origAlignInChunk
 
 

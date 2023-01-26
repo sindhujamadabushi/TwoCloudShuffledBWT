@@ -5,7 +5,6 @@ import argparse
 import os
 import Parameters
 import errno
-import random
 from mpi4py import MPI
 
 basePath = os.getcwd() + "/../"
@@ -61,11 +60,6 @@ Lp = np.load(localPath + "Lp.npy")
 Fp = np.load(localPath + "Fp.npy")
 L = np.load(localPath + "L.npy")
 
-# Load primes
-localPath = basePath + 'inputs/'
-with open(localPath + 'primes.txt', 'r') as f:
-    primesList = list(map(int, f.readlines()))
-
 timeLoad = time.process_time() - startLoadTime
 print("Finished loading read and template information in ", round(timeLoad, 2))
 
@@ -76,31 +70,30 @@ print("\nPerforming preprocessing operations for CloudL...")
 # Create Ldict
 Ldict = {'A': np.where(L == 'A')[0], 'C': np.where(L == 'C')[0], 'G': np.where(L == 'G')[0], 'T': np.where(L == 'T')[0]}
 
-# Create primes array for group encoding
-numPrimes = Parameters.numPrimes
-primes = np.reshape(np.random.choice(primesList, numPrimes*numReadGroups, replace=False), (numReadGroups, numPrimes))
-np.save(outputPath + 'primes', primes)
+# Load primes
+primes = np.load(localPath + 'primes.npy')
 
 # Create easy way to identify groups
 groupDict = dict()
 LStart = Parameters.LStart
 numLs = Parameters.numLs
+numPrimes = Parameters.numPrimes
 l_vals = np.arange(LStart, LStart + numLs)
 r_vals = np.empty([numReadGroups, numPrimes*numLs], dtype=np.int64)
 for i in range(numLs):
-    r_vals[:, i*numPrimes:(i+1)*numPrimes] = primes*l_vals[i]
+     r_vals[:, i*numPrimes:(i+1)*numPrimes] = primes*l_vals[i]
 
 AStart = Parameters.AStart
 numAs = Parameters.numAs
 a_vals = np.arange(AStart, AStart + numAs)
 m_vals = np.empty([numReadGroups, numPrimes*numLs, numAs], dtype=np.int64)
 for i in range(numAs):
-    m_vals[:, :, i] = r_vals*a_vals[i]
+     m_vals[:, :, i] = r_vals*a_vals[i]
 
 for i in range(numReadGroups):
-    for j in range(numPrimes*len(l_vals)):
-        for k in range(len(a_vals)):
-            groupDict[m_vals[i, j, k]] = i
+     for j in range(numPrimes*len(l_vals)):
+         for k in range(len(a_vals)):
+             groupDict[m_vals[i, j, k]] = i
 
 timePreprocessing = time.process_time() - stPreprocessingTime
 print("Finished performing preprocessing operations for CloudL in ", round(timePreprocessing, 2))
@@ -118,7 +111,6 @@ def getGroups(Fbar):
     tmp = Fbar[:, 1]
     u, inv = np.unique(tmp, return_inverse=True)
     result[:, 1] = np.array([groupDict[x] for x in u])[inv].reshape(tmp.shape)
-
     return result
 
 
@@ -129,15 +121,13 @@ def convertLbar2Fbar(Lbar):
     m = (a * (p - 1))
     t = Lp[q]
     result = np.column_stack((t, m))
-
     return result
 
 
 def generateGroupEncoding(groupNum, numIndices):
-    ls = [random.getrandbits(6)+LStart for i in range(numIndices)]
+    ls = np.random.randint(low=LStart, high=LStart + numLs, size=numIndices)
     qs = np.random.choice(primes[groupNum], numIndices, replace=True)
     result = (qs*ls)+1
-
     return result
 
 
@@ -151,7 +141,6 @@ def firstIterationInCloudL(iterNum):
             startPos += groupSizes[g-1]
         Lbar[startPos:startPos+groupSizes[g], 0] = Ldict[bases[g]]
         Lbar[startPos:startPos+groupSizes[g], 1] = generateGroupEncoding(g, len(Ldict[bases[g]]))
-
     return Lbar
 
 

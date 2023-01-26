@@ -1,6 +1,8 @@
 import TransformReads as tr
 import TransformTemplate as tt
 import BWTStructure as bwt
+import Parameters
+import numpy as np
 import time
 import argparse
 import os
@@ -55,6 +57,10 @@ scrambledTemplateChunks, scramblePermutation = bwt.ScrambleTemplate(template, nu
 templateChunkTime = time.process_time() - st
 print("\nTime for creating all template chunks for chromosome ", chrNum, ": ", round(time.process_time() - st, 2), "\n")
 
+# Load primes
+with open(basePath + 'primes.txt', 'r') as f:
+    primesList = list(map(int, f.readlines()))
+
 # Transform template
 for templateChunk in range(numTemplateChunks):
     localPath = resultsPath + "template_chunk_" + str(templateChunk) + "/"
@@ -62,6 +68,11 @@ for templateChunk in range(numTemplateChunks):
     tt.TransformReferenceTemplate(scrambledTemplateChunks[templateChunk], localPath, templateChunkTime/numTemplateChunks)
     templateTime = time.process_time() - st
     print("Template Chunk #", templateChunk, " time: ", round(templateTime, 2))
+
+    # Create primes
+    numPrimes = Parameters.numPrimes
+    primes = np.reshape(np.random.choice(primesList, numPrimes*numReadGroups, replace=False), (numReadGroups, numPrimes))
+    np.save(localPath + 'primes', primes)
 
 # Transform reads
 print("\nStarting to process reads...")
