@@ -45,7 +45,7 @@ Expected terminal output:
 ```
 python3 postprocessing.py --chrnum 21 --nr 100000 --rl 150 --nrg 2 --nrb 100 --tcn 0 --rbn 0
 ```
-The above code generates *final_alignments.json* file with in the "template_chunk_x_read_batch_y" folder.
+The above code generates *final_alignments.json* file within the "template_chunk_x_read_batch_y" folder.
 
 Expected terminal output (time in seconds): 
 > "Completed postprocessing in xx.x" 
